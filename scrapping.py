@@ -1,16 +1,21 @@
 from selenium import webdriver
-import pandas as pd
-from urllib.request import urlopen
+import urllib.parse
+import requests
+import json
 
-#driver = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver")
 
-url = "http://olympus.realpython.org/profiles/aphrodite"
 
-page = urlopen(url)
 
-html_bytes = page.read()
-html = html_bytes.decode("utf-8")
 
-#content = driver.page_source
-#df = pd.DataFrame({'Name':name,'PhoneNumber':numberPhone,'Street':street}) 
-#df.to_csv('products.csv', index=False, encoding='utf-8')
+def main():
+    profession = ""
+    departement = None
+    scrap(departement=departement, professionNom=profession)
+
+def scrap(departement, professionNom):
+    
+    headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36'}
+    professionUrl = 'http://annuairesante.ameli.fr/xhr/profession?' + urllib.parse.urlencode({'acte': '', 'term':professionNom})
+    profession = requests.get(professionUrl, headers=headers) 
+    
+    profession = profession.json()[0]  
